@@ -1,0 +1,43 @@
+<div *ngIf="flagModel.catFlag">
+<h3> Category Data</h3>
+<p-dataTable [value]="categorys" [style]="{'width':'50%'}" selectionMode="single" [(selection)]="selectedCategory" (onRowSelect)="onRowSelect($event)"  [paginator]="true" [rows]="5" [responsive]="true" >
+  
+  <p-column field="name"  header="Name"></p-column>
+  <p-column field="description" header="Description"></p-column>
+
+  <p-footer>
+    
+    <div class="ui-helper-clearfix" style="width:100%">
+      <button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button>
+      <button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToDelete()" label="Delete"></button>
+      <button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToEdit()" label="Edit"></button>
+    </div>
+   
+  </p-footer>
+ 
+
+</p-dataTable>
+</div>
+<p-dialog header="category Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true">
+<div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="category">
+    <div class="ui-grid-row">
+        <div class="ui-grid-col-4"><label for="name">Name</label></div>
+        <div class="ui-grid-col-8"><input pInputText id="name" [(ngModel)]="category.name" /></div>
+    </div>
+    <div class="ui-grid-row">
+        <div class="ui-grid-col-4"><label for="description">Description</label></div>
+        <div class="ui-grid-col-8"><input pInputText id="description" [(ngModel)]="category.description" /></div>
+    </div>
+   
+</div>
+<p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      
+        <button type="button" pButton icon="fa-check" (click)="save()" label="Save"></button>
+    </div>
+</p-footer>
+</p-dialog>
+<p-confirmDialog></p-confirmDialog>
+
+<br>
+<app-subcategory [subcategorys] = "subcategory" [locationid]="locationid" [departmentid]="departmentid" [categoryid]="category.id" [flagModel]="flagModel" *ngIf="subcategory"></app-subcategory>

@@ -1,0 +1,44 @@
+
+<div *ngIf="flagModel.deptFlag">
+        <h3> Department Data</h3>
+<p-dataTable [value]="departments" [style]="{'width':'50%'}" selectionMode="single" [(selection)]="selectedDepartment"  (onRowUnSelect)="onRowUnSelect($event)" (onRowSelect)="onRowSelect($event)"  [paginator]="true" [rows]="5" [responsive]="true" >
+  
+  <p-column field="name"  header="Name"></p-column>
+  <p-column field="description" header="Description"></p-column>
+
+  <p-footer>
+    
+    <div class="ui-helper-clearfix" style="width:100%">
+      <button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button>
+      <button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToDelete()" label="Delete"></button>
+      <button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToEdit()" label="Edit"></button>
+    </div>
+   
+  </p-footer>
+ 
+
+</p-dataTable>
+</div>
+
+<p-dialog header="department Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true">
+<div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="department">
+    <div class="ui-grid-row">
+        <div class="ui-grid-col-4"><label for="name">Name</label></div>
+        <div class="ui-grid-col-8"><input pInputText id="name" [(ngModel)]="department.name" /></div>
+    </div>
+    <div class="ui-grid-row">
+        <div class="ui-grid-col-4"><label for="description">Description</label></div>
+        <div class="ui-grid-col-8"><input pInputText id="description" [(ngModel)]="department.description" /></div>
+    </div>
+   
+</div>
+<p-footer>
+    <div class="ui-dialog-buttonpane ui-helper-clearfix">
+      
+        <button type="button" pButton icon="fa-check" (click)="save()" label="Save"></button>
+    </div>
+</p-footer>
+</p-dialog>
+<p-confirmDialog></p-confirmDialog>
+<br>
+<app-category [categorys] = "category" [locationid]="locationid" [departmentid]="department.id" [flagModel]="flagModel" *ngIf="flagModel.catFlag"></app-category>

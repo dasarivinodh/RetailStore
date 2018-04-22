@@ -2,10 +2,10 @@ import { Injectable, OnInit } from "@angular/core";
 import { Http, Response } from '@angular/http';
 import { TreeNode } from 'primeng/primeng';
 import { Observable } from "rxjs/Observable";
-import { LocationModel } from "./locationModel";
+import { DepartmentModel } from "./departmentModel";
 
 @Injectable()
-export class LocationService implements OnInit {
+export class DepartmentService implements OnInit {
 
   apiRoot:string='http://localhost:8080/location/';
   results:Object[];
@@ -19,7 +19,7 @@ export class LocationService implements OnInit {
   ngOnInit(){
 
   }
-  postService(value:LocationModel, location: String, department: String, category: String)
+  postService(value:DepartmentModel, location: String, department: String, category: String)
   {
     let apiUrl=this.apiUrl(location,department,category,false);
 
@@ -31,7 +31,7 @@ export class LocationService implements OnInit {
          
          res =>{
           
-          // console.log(res.json());          
+          //console.log(res.json());          
           
           resolve(res.json());
            
@@ -43,7 +43,7 @@ export class LocationService implements OnInit {
 
   }
 
-  putService(value:LocationModel, location: String, department: String, category: String)
+  putService(value:DepartmentModel, location: String, department: String, category: String)
   {
     let apiUrl=this.apiUrl(location,department,category,false);
 
@@ -67,14 +67,11 @@ export class LocationService implements OnInit {
 
   }
 
-  deleteService(location: String, department: String, category: String,subcategory:String)
+  deleteService(location: String, department: String, category: String)
   {
     let apiUrl=this.apiUrl(location,department,category,true);
 
-    if(subcategory)
-    {
-      apiUrl+="/subcategory/"+subcategory;
-    }
+    
     let promise = new Promise((resolve, reject) => {
       this.http.delete(apiUrl)
        .toPromise()
@@ -108,7 +105,7 @@ export class LocationService implements OnInit {
       // console.log("apiUrl 3");
     }else{
       apiUrl=this.apiRoot;
-      //console.log(apiUrl);
+      console.log(apiUrl);
     }
     return apiUrl;
   }

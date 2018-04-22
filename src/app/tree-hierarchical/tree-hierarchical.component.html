@@ -1,1 +1,1 @@
-<p-tree [value]="results" layout="horizontal" selectionMode="single" ></p-tree>
+<p-tree [value]="results" layout="horizontal" selectionMode="single" (onNodeSelect)="nodeSelect($event)" (onNodeUnselect)="nodeUnselect($event)"></p-tree>
