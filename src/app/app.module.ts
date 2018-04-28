@@ -1,11 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http'; 
+import { HttpModule } from '@angular/http';
 
 
 import { LocationService } from './locationService';
 import { AppComponent } from './app.component';
-import {DataTableModule, TreeModule,DialogModule,ButtonModule,InputTextModule,ConfirmDialogModule} from 'primeng/primeng';
+import { DataTableModule, TreeModule, DialogModule, ButtonModule, InputTextModule, ConfirmDialogModule, MenuModule } from 'primeng/primeng';
+import {ContextMenuModule} from 'primeng/contextmenu';
 import { FormsModule } from '@angular/forms';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -16,6 +17,7 @@ import { DepartmentComponent } from './department/department.component';
 import { CategoryComponent } from './category/category.component';
 import { SubcategoryComponent } from './subcategory/subcategory.component';
 import { HttpClientModule } from '@angular/common/http';
+import {MenuItem} from 'primeng/api';
 
 
 @NgModule({
@@ -26,8 +28,8 @@ import { HttpClientModule } from '@angular/common/http';
     DepartmentComponent,
     CategoryComponent,
     SubcategoryComponent
-    
-    
+
+
   ],
   imports: [
     BrowserModule,
@@ -42,8 +44,9 @@ import { HttpClientModule } from '@angular/common/http';
     InputTextModule,
     BrowserAnimationsModule,
     ConfirmDialogModule,
-    HttpClientModule
-
+    HttpClientModule,
+    MenuModule,
+    ContextMenuModule
   ],
   providers: [LocationService],
   bootstrap: [AppComponent]

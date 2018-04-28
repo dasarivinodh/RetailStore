@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LocationService } from '../locationService';
-import { TreeNode,TreeModule } from 'primeng/primeng';
+import { TreeNode, TreeModule } from 'primeng/primeng';
+import {MenuItem} from 'primeng/api';
+
 import { Observable } from 'rxjs/Observable';
 
 
@@ -14,98 +16,133 @@ import { Observable } from 'rxjs/Observable';
 export class TreeHierarchicalComponent implements OnInit {
 
   results: TreeNode[];
-  locationTree:TreeNode[];
-  departmentTree:TreeNode[];
-  categoryTree:TreeNode[];
-  subCategoryTree:TreeNode[];
-  element:TreeNode;
-  constructor(private locationService:LocationService) { }
+  locationTree: TreeNode[];
+  items: MenuItem[];
+  element: TreeNode;
+  constructor(private locationService: LocationService) { }
 
-  nodeSelect(value){   }
+  nodeSelect(value) { }
 
-  nodeUnselect(value){  }
+  nodeUnselect(value) { }
+
+  loadNode(value) {
+    if (value.node) {
+      switch (value.node.type) {
+        case 'ROOT':
+          this.locationService.service(null, null, null).then(result =>
+            value.node.children = this.treeFormationValue(result, this.getChildFlag(value.node.type), value.node));
+          break;
+
+        case 'CS':
+          this.locationService.service(value.node.id, null, null).then(result =>
+            value.node.children = this.treeFormationValue(result, this.getChildFlag(value.node.type), value.node));
+          break;
+        case 'DP':
+          const args: string[] = value.node.parentValue.split('/');
+          this.locationService.service(args[0], value.node.id, null).then(result =>
+            value.node.children = this.treeFormationValue(result, this.getChildFlag(value.node.type), value.node));
+          break;
+        case 'CT':
+          const arg: string[] = value.node.parentValue.split('/');
+          this.locationService.service(arg[0], arg[1], value.node.id).then(result =>
+            value.node.children = this.treeFormationValue(result, this.getChildFlag(value.node.type), value.node));
+          break;
+
+
+      }
+
+      // console.log(value.node);
+    }
+
+  }
 
   ngOnInit() {
-    this.locationService.service(null,null,null).then(result=>this.node1Formation(result,'CS')); 
+    this.locationService.service(null, null, null).then(result => this.node1Formation(result, 'CS'));
+    this.items = [
+      {label: 'Add', icon: 'fa-search', command: (event) => {alert('add');}},
+      {label: 'Edit', icon: 'fa-close', command: (event) =>{ alert('edit');}},
+      {label: 'Delete', icon: 'fa-close', command: (event) => {alert('delete');}}
+    ];
   }
 
-  node1Formation(node1Result,flag){
-    switch(flag){
-      case 'CS':
-      this.locationTree=this.treeFormationValue(node1Result,flag);  
-         console.log(this.locationTree);
-      this.results = [
-        {
-          label: 'Root',
-          collapsedIcon: 'fa-folder',
-          expandedIcon: 'fa-folder-open',
-          "children":this.locationTree
-        }
-      ];
-      break;
+  node1Formation(node1Result, flag) {
+    this.results = [
+      {
+        label: 'Root',
+        collapsedIcon: 'fa-folder',
+        expandedIcon: 'fa-folder-open',
+        type: 'ROOT',
+        leaf: false
+      }
+    ];
+  }
 
-    }
-   }
+  treeFormationValue(node1Result, flag, node) {
 
-   treeFormationValue(node1Result,flag){
-    if(flag==='CS'){
-      for(let element of node1Result) {
-        // console.log(element.name+" "+this.getChildFlag(flag));
-        this.departmentTree=this.treeFormationValue(element,this.getChildFlag(flag));
-        element.label=element.name;
-        element.collapsedIcon= 'fa-folder';
-        element.expandedIcon= 'fa-folder-open';
-        element.type=flag;
-        element.children= this.treeFormationValue(element,this.getChildFlag(flag));   
-
-      };
+    const locationTreeValue = node1Result;
+    if (flag === 'CS') {
+      for (let element of locationTreeValue) {
+        element.label = element.name;
+        element.collapsedIcon = 'fa-folder';
+        element.expandedIcon = 'fa-folder-open';
+        element.type = flag;
+        element.leaf = false;
+        element.parentValue = element.id + '';
+      }
     }
-    if(flag==='DP'){
-      for(let element of node1Result){
-         console.log("DP"+element.name);
-        //console.log(element.name+" "+this.getChildFlag(flag));
-        element.label=element.name;
-        element.collapsedIcon= 'fa-folder';
-        element.expandedIcon= 'fa-folder-open';
-        element.parent="Hyderabad"
-        element.type=flag;
-      };
-      //console.log(node1Result);
+    if (flag === 'DP') {
+      for (let element of locationTreeValue) {
+        element.label = element.name;
+        element.collapsedIcon = 'fa-folder';
+        element.expandedIcon = 'fa-folder-open';
+        element.type = flag;
+        element.leaf = false;
+        element.parentValue = node.parentValue + '/' + element.id;
+      }
     }
-   return <TreeNode[]>node1Result;
+    if (flag === 'CT') {
+      for (let element of locationTreeValue) {
+        console.log('CT' + element.name);
+        element.label = element.name;
+        element.collapsedIcon = 'fa-folder';
+        element.expandedIcon = 'fa-folder-open';
+        element.type = flag;
+        element.leaf = false;
+        element.parentValue = node.parentValue + '/' + element.id;
+      }
+    }
+    if (flag === 'SC') {
+      for (let element of locationTreeValue) {
+        console.log('CT' + element.name);
+        element.label = element.name;
+        element.collapsedIcon = 'fa-folder';
+        element.expandedIcon = 'fa-folder-open';
+        element.type = flag;
+        element.leaf = true;
+        element.parentValue = node.parentValue + '/' + element.id;
+      }
+    }
+    console.log(locationTreeValue);
+    return <TreeNode[]>locationTreeValue;
 
   }
 
-  childFormation(node1Result,childFlag){
-    switch(childFlag){
-      
-    case 'DP':
-    this.locationService.service(node1Result.id,null,null).then(result=>this.treeFormationValue(result,'DP'));
-    break;
-    }
 
-   }
-
-
-   testMethod(value){
-    switch(value.node.type){
-      case 'CS':
-      this.locationService.service(value.node.id,null,null).then(result=>this.node1Formation(result,'DP'));
-      value.node.children=this.departmentTree;
-      break;
-     }
-   }
-   getChildFlag(flag){
-      let childflag=null;
-    switch(flag){
-      case 'CS':
-        childflag='DP';
+  getChildFlag(flag) {
+    let childflag = null;
+    console.log(flag);
+    switch (flag) {
+      case 'ROOT':
+        childflag = 'CS';
         break;
-      case 'DP' :
-        childflag='CT';
+      case 'CS':
+        childflag = 'DP';
+        break;
+      case 'DP':
+        childflag = 'CT';
         break;
       case 'CT':
-        childflag='SC'
+        childflag = 'SC';
         break;
 
     }
@@ -113,7 +150,5 @@ export class TreeHierarchicalComponent implements OnInit {
     return childflag;
 
 
-   }
-
-   
+  }
 }
