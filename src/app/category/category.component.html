@@ -8,9 +8,11 @@
   <p-footer>
     
     <div class="ui-helper-clearfix" style="width:100%">
-      <button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button>
-      <button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToDelete()" label="Delete"></button>
-      <button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToEdit()" label="Edit"></button>
+      <button type="button" pButton icon="fa-plus" class="ui-button-success" style="float:left" (click)="showDialogToAdd()" label="Add"></button>
+      
+      <button type="button" pButton icon="fa-refresh"  class="ui-button-info" style="float:left" (click)="showDialogToEdit()" label="Edit"></button>
+
+      <button type="button" pButton icon="fa-close"  class="ui-button-danger" style="float:left" (click)="showDialogToDelete()" label="Delete"></button>
     </div>
    
   </p-footer>

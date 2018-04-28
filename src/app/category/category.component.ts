@@ -3,9 +3,9 @@ import { CategoryModel } from '../categoryModel';
 import { LocationService } from '../locationService';
 import { ConfirmationService, Messages } from 'primeng/primeng';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
-import { LocationModel } from '../locationModel';
 import { SubCategoryModel } from '../subcategoryModel';
 import { ComponentVisibiltyModel } from '../componentVisibiltyModel';
+import { DepartmentModel } from '../departmentModel';
 
 @Component({
   selector: 'app-category',
@@ -67,10 +67,12 @@ showDialogToDelete()
     header: 'Delete Confirmation',
     icon: 'fa fa-trash',
     accept: () => {
-      this.locationService.deleteService(this.locationid,this.departmentid,this.category.id+'',null); 
+      this.locationService.deleteService(this.locationid,this.departmentid,this.category.id+'',null).then(data=>{
+        this.locationService.service(this.locationid,this.departmentid,null).then(result=>this.categorys=<CategoryModel[]>result); 
+      }); 
       
       this.displayDialog = false;
-      this.ngOnInit();
+     
     },
     reject: () => {
       this.displayDialog = false;
@@ -86,27 +88,35 @@ cloneCategory(c: CategoryModel): CategoryModel {
   return category;
 }
 showDialogToEdit(){
-    this.newCategory = true;
+    this.newCategory = false;
     this.displayDialog = true;
 
   }
   save() {
     //let categorys = [...this.categorys];
     if(this.newCategory){
-      //console.log(this.category);
-        //categorys.push(this.category);
-        this.locationService.postService(this.category,this.locationid,this.departmentid,null);
-      //console.log("Adding");
+     
+        this.locationService.postService(this.category,this.locationid,this.departmentid,null).then(data=>{
+          // console.log(data);
+            let categorys = [...this.categorys];
+            categorys.push(<CategoryModel>data);
+             this.categorys=categorys;
+             
+            }
+        );
+     
     }
     else{
        // categorys[this.findSelectedCarIndex()] = this.category;
-      this.locationService.putService(this.category,this.locationid,null,null);
-     //console.log("Updating");
+      this.locationService.putService(this.category,this.locationid,this.departmentid,null).then(data=>{
+
+        this.locationService.service(this.locationid,this.departmentid,null).then(result=>this.categorys=<CategoryModel[]>result); 
+      });
+     
   }
-   // this.categorys = categorys;
-   
+  
     this.displayDialog = false;
-    this.ngOnInit();
+  
 }
 
 }

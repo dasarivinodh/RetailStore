@@ -30,7 +30,7 @@ export class LocationComponent implements OnInit {
 
   ngOnInit() {
     this.displayDept = false;
-    this.locationService.service(null,null,null).then(result=>this.fetchLocation(result )); 
+    this.locationService.service(null,null,null).then(result=>this.locations=<LocationModel[]>result); 
     this.flagModel=new ComponentVisibiltyModel(true,false,false,false);
 
   }
@@ -68,10 +68,13 @@ showDialogToDelete()
     header: 'Delete Confirmation',
     icon: 'fa fa-trash',
     accept: () => {
-      this.locationService.deleteService(this.location.id+'',null,null,null); 
+      this.locationService.deleteService(this.location.id+'',null,null,null).then(data=>{
+        this.locationService.service(null,null,null).then(result=>this.locations=<LocationModel[]>result); 
+      }
+      ); 
     
       this.displayDialog = false;
-      this.ngOnInit();
+     
     },
     reject: () => {
       this.displayDialog = false;
@@ -92,22 +95,30 @@ showDialogToEdit(){
 
   }
   save() {
-    //let locations = [...this.locations];
-    if(this.newLocation){
-      //console.log(this.location);
-        //locations.push(this.location);
-        this.locationService.postService(this.location,null,null,null);
-      //console.log("Adding");
+    
+    if(this.newLocation)
+    {
+        this.locationService.postService(this.location,null,null,null).then(data=>{
+
+          let locations = [...this.locations];
+             locations.push(<LocationModel>data);
+             this.locations=locations;
+            }
+        );
     }
-    else{
-       // locations[this.findSelectedCarIndex()] = this.location;
-      this.locationService.putService(this.location,null,null,null);
-     //console.log("Updating");
-  }
-   // this.locations = locations;
-   // this.location = null;
-    this.displayDialog = false;
-    this.ngOnInit();
+    else
+    {
+         this.locationService.putService(this.location,null,null,null).then(data=>{
+
+         
+          this.locationService.service(null,null,null).then(result=>this.locations=<LocationModel[]>result); 
+            }
+        );
+   
+     }
+  
+    this.displayDialog = false; 
+   
 }
 
 }

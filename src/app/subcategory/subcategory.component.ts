@@ -4,6 +4,7 @@ import { LocationService } from '../locationService';
 import { ConfirmationService, Messages } from 'primeng/primeng';
 import { Message } from '@angular/compiler/src/i18n/i18n_ast';
 import { ComponentVisibiltyModel } from '../componentVisibiltyModel';
+import { SubCategoryModel } from '../subcategoryModel';
 
 
 @Component({
@@ -37,7 +38,6 @@ export class SubcategoryComponent implements OnInit {
   }
   fetchSubCategory(result){
     this.subcategorys=result;
-   // console.log(this.subcategory);
   }
   
   showDialogToAdd()
@@ -48,8 +48,6 @@ export class SubcategoryComponent implements OnInit {
   }
   onRowSelect(event) {
     this.newSubCategory = false;
-
-    //console.log(event.data);
     this.subcategory = this.cloneSubCategory(event.data);
     this.displayDialog = false;
 }
@@ -60,10 +58,14 @@ showDialogToDelete()
     header: 'Delete Confirmation',
     icon: 'fa fa-trash',
     accept: () => {
-      this.locationService.deleteService(this.locationid,this.departmentid,this.categoryid+'',this.subcategory.id+''); 
+      this.locationService.deleteService(this.locationid,this.departmentid,this.categoryid+'',this.subcategory.id+'').then(data=>{
+        this.locationService.service(this.locationid,this.departmentid,this.categoryid).then(result=>this.subcategorys=<SubCategoryModel[]>result); 
+      }
+
+      ); 
       this.subcategory=null;
       this.displayDialog = false;
-      this.ngOnInit();
+     
     },
     reject: () => {
       this.displayDialog = false;
@@ -79,27 +81,35 @@ cloneSubCategory(c: LocationModel): LocationModel {
   return subcategory;
 }
 showDialogToEdit(){
-    this.newSubCategory = true;
+    this.newSubCategory = false;
     this.displayDialog = true;
 
   }
   save() {
-    //let subcategorys = [...this.subcategorys];
+   
     if(this.newSubCategory){
-      //console.log(this.subcategory);
-        //subcategorys.push(this.subcategory);
-        this.locationService.postService(this.subcategory,this.locationid,this.departmentid,this.categoryid);
-      //console.log("Adding");
+     
+        this.locationService.postService(this.subcategory,this.locationid,this.departmentid,this.categoryid).then(data=>{
+
+          let subcategorys = [...this.subcategorys];
+          subcategorys.push(<SubCategoryModel>data);
+           this.subcategorys=subcategorys;
+          }
+      );
+   
     }
     else{
-       // subcategorys[this.findSelectedCarIndex()] = this.subcategory;
-      this.locationService.putService(this.subcategory,this.locationid,this.departmentid,this.categoryid);
-     //console.log("Updating");
+      
+      this.locationService.putService(this.subcategory,this.locationid,this.departmentid,this.categoryid).then(data=>{
+
+        this.locationService.service(this.locationid,this.departmentid,this.categoryid).then(result=>this.fetchSubCategory(result)); 
+      });
+    
   }
-   // this.subcategorys = subcategorys;
+
     this.subcategory = null;
     this.displayDialog = false;
-    this.ngOnInit();
+   
 }
 
 }

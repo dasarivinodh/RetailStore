@@ -1,3 +1,4 @@
+
 <div *ngIf="flagModel.locationFlag">
 <h3> Location Data</h3>
 <p-dataTable [value]="locations" selectionMode="single"  [style]="{'width':'50%'}" [(selection)]="selectedLocation"  (onRowSelect)="onRowSelect($event)"  [paginator]="true" [rows]="5" [responsive]="true">
@@ -5,12 +6,14 @@
     <p-column field="name"  header="Name"></p-column>
     <p-column field="description" header="Description"></p-column>
   
-    <p-footer>
+    <p-footer> 
       
       <div class="ui-helper-clearfix" style="width:100%">
-        <button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button>
-        <button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToDelete()" label="Delete"></button>
-        <button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToEdit()" label="Edit"></button>
+        <button type="button" pButton icon="fa-plus" class="ui-button-success" style="float:left" (click)="showDialogToAdd()" label="Add"></button>
+        
+        <button type="button" pButton icon="fa-refresh"  class="ui-button-info"  style="float:left" (click)="showDialogToEdit()" label="Edit"></button>
+
+        <button type="button" pButton icon="fa-close" class="ui-button-danger" style="float:left" (click)="showDialogToDelete()" label="Delete"></button>
       </div>
      
     </p-footer>

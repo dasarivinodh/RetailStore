@@ -14,14 +14,14 @@ import { Observable } from 'rxjs/Observable';
 export class TreeHierarchicalComponent implements OnInit {
 
   results: TreeNode[];
-  centerStoreTree:TreeNode[];
+  locationTree:TreeNode[];
   departmentTree:TreeNode[];
   categoryTree:TreeNode[];
   subCategoryTree:TreeNode[];
   element:TreeNode;
   constructor(private locationService:LocationService) { }
 
-  nodeSelect(value){  }
+  nodeSelect(value){   }
 
   nodeUnselect(value){  }
 
@@ -32,14 +32,14 @@ export class TreeHierarchicalComponent implements OnInit {
   node1Formation(node1Result,flag){
     switch(flag){
       case 'CS':
-      this.centerStoreTree=this.treeFormationValue(node1Result,flag);  
-         
+      this.locationTree=this.treeFormationValue(node1Result,flag);  
+         console.log(this.locationTree);
       this.results = [
         {
-          label: 'value1',
+          label: 'Root',
           collapsedIcon: 'fa-folder',
           expandedIcon: 'fa-folder-open',
-          "children":this.centerStoreTree
+          "children":this.locationTree
         }
       ];
       break;
@@ -50,31 +50,33 @@ export class TreeHierarchicalComponent implements OnInit {
    treeFormationValue(node1Result,flag){
     if(flag==='CS'){
       for(let element of node1Result) {
-        element.label=element.name;
-        element.collapsedIcon= 'fa-folder';
-        element.expandedIcon= 'fa-folder-open';
-        element.type=flag;    
-        element.children= this.childFormation(element,this.getChildFlag(flag));
-      };
-
-      console.log(node1Result);
-     // this.centerStoreTree= <TreeNode[]>node1Result;
-     //this.childFormation(this.centerStoreTree,this.getChildFlag(flag));
-      
-    }
-    if(flag==='DP'){
-      node1Result.forEach(element => {
+        // console.log(element.name+" "+this.getChildFlag(flag));
+        this.departmentTree=this.treeFormationValue(element,this.getChildFlag(flag));
         element.label=element.name;
         element.collapsedIcon= 'fa-folder';
         element.expandedIcon= 'fa-folder-open';
         element.type=flag;
-      });
-      console.log(node1Result);
+        element.children= this.treeFormationValue(element,this.getChildFlag(flag));   
+
+      };
+    }
+    if(flag==='DP'){
+      for(let element of node1Result){
+         console.log("DP"+element.name);
+        //console.log(element.name+" "+this.getChildFlag(flag));
+        element.label=element.name;
+        element.collapsedIcon= 'fa-folder';
+        element.expandedIcon= 'fa-folder-open';
+        element.parent="Hyderabad"
+        element.type=flag;
+      };
+      //console.log(node1Result);
     }
    return <TreeNode[]>node1Result;
+
   }
 
-  async childFormation(node1Result,childFlag){
+  childFormation(node1Result,childFlag){
     switch(childFlag){
       
     case 'DP':
@@ -93,11 +95,6 @@ export class TreeHierarchicalComponent implements OnInit {
       break;
      }
    }
-
-
-
-   
-
    getChildFlag(flag){
       let childflag=null;
     switch(flag){

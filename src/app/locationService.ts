@@ -1,18 +1,22 @@
 import { Injectable, OnInit } from "@angular/core";
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestOptionsArgs, RequestOptions } from '@angular/http';
 import { TreeNode } from 'primeng/primeng';
 import { Observable } from "rxjs/Observable";
 import { LocationModel } from "./locationModel";
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import 'rxjs/add/operator/map';
+
 
 @Injectable()
 export class LocationService implements OnInit {
 
   apiRoot:string='http://localhost:8080/location/';
-  results:Object[];
+ 
   loading:boolean;
 
-  constructor(private http:Http) { 
-    this.results = [];
+  
+  constructor(private http:HttpClient) { 
+   
     this.loading = false;
   }
 
@@ -31,9 +35,10 @@ export class LocationService implements OnInit {
          
          res =>{
           
-          // console.log(res.json());          
+               
           
-          resolve(res.json());
+          resolve(res);
+          //reject(res);
            
          }
       );
@@ -54,10 +59,8 @@ export class LocationService implements OnInit {
        .then(
          
          res =>{
-          
-          //console.log(res.json());          
-          
-          resolve(res.json());
+   
+          resolve(res);
            
          }
       );
@@ -81,11 +84,7 @@ export class LocationService implements OnInit {
        .then(
          
          res =>{
-          
-          //console.log(res.json());          
-          
           resolve(res);
-           
          }
       );
    });
@@ -96,30 +95,25 @@ export class LocationService implements OnInit {
   apiUrl(location: String, department: String, category: String,deleteFlag:boolean){
 
     let apiUrl:string='';
-    let results:TreeNode[];
+    
     if(location && department && category ){
       apiUrl=deleteFlag?this.apiRoot+location+'/department/'+department+'/category/'+category:this.apiRoot+location+'/department/'+department+'/category/'+category+'/subcategory';
-      // console.log("apiUrl 1");
+    
     } else if(location && department){
       apiUrl=deleteFlag?this.apiRoot+location+'/department/'+department:this.apiRoot+location+'/department/'+department+'/category';
-      // console.log("apiUrl 2");
+      
     }else if(location){
       apiUrl=deleteFlag?this.apiRoot+location:this.apiRoot+location+'/department';
-      // console.log("apiUrl 3");
+     
     }else{
       apiUrl=this.apiRoot;
-      //console.log(apiUrl);
+     
     }
     return apiUrl;
   }
   service(location: String, department: String, category: String){
-    //console.log(location);
-    let apiUrl=this.apiUrl(location,department,category,false);
-
-    // return this.http.get('http://localhost:8080/location/')
-    //                 .toPromise()
-    //                 .then(res =>  res.json().data);
     
+    let apiUrl=this.apiUrl(location,department,category,false);
     let promise = new Promise((resolve, reject) => {
       this.http.get(apiUrl)
        .toPromise()
@@ -127,9 +121,9 @@ export class LocationService implements OnInit {
          
          res =>{
           
-          //console.log(res.json());          
+         
           
-          resolve(res.json());
+          resolve(res);
            
          }
       );

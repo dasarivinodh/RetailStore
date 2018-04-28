@@ -26,22 +26,21 @@ export class DepartmentComponent implements OnInit,AfterViewInit {
   newDepartment:boolean;
   displayDept:boolean;
   constructor(private locationService:LocationService,private confirmationService:ConfirmationService) {
-    // console.log("Cons")
+   
    }
 
   ngOnInit() {
-   console.log("loading");
+   
   this.locationService.service(this.locationid+'',null,null).then(result=>this.fetchDepartment(result)); 
    
   }
 
   ngAfterViewInit(){
-  this.fetchCategory(null);
+  
 }
 
   fetchDepartment(result){
     this.departments=result;
-   // console.log(this.department);
   }
   
   showDialogToAdd()
@@ -53,7 +52,7 @@ export class DepartmentComponent implements OnInit,AfterViewInit {
   onRowSelect(event) {
     this.newDepartment = false;
 
-    // console.log(event.data);
+   
     this.department = this.cloneDepartment(event.data);
     this.displayDialog = false;
 
@@ -72,7 +71,11 @@ showDialogToDelete()
     header: 'Delete Confirmation',
     icon: 'fa fa-trash',
     accept: () => {
-      this.locationService.deleteService(this.locationid,this.department.id+'',null,null); 
+      this.locationService.deleteService(this.locationid,this.department.id+'',null,null).then(data=>
+        {
+          this.locationService.service(this.locationid+'',null,null).then(result=>this.departments=<DepartmentModel[]>result);
+        }
+      ); 
       // this.department=null;
       this.displayDialog = false;
       this.ngOnInit();
@@ -91,27 +94,39 @@ cloneDepartment(c: DepartmentModel): DepartmentModel {
   return department;
 }
 showDialogToEdit(){
-    this.newDepartment = true;
+    this.newDepartment = false;
     this.displayDialog = true;
 
   }
   save() {
     //let departments = [...this.departments];
     if(this.newDepartment){
-      // console.log(this.department);
-        //departments.push(this.department);
-        this.locationService.postService(this.department,this.locationid,null,null);
-      // console.log("Adding");
+   
+        this.locationService.postService(this.department,this.locationid,null,null).then(data=>{
+
+            let departments = [...this.departments];
+            departments.push(<DepartmentModel>data);
+             this.departments=departments;
+            }
+        );
+      
     }
     else{
-       // departments[this.findSelectedCarIndex()] = this.department;
-      this.locationService.putService(this.department,this.locationid,null,null);
-    //  console.log("Updating");
+      
+      this.locationService.putService(this.department,this.locationid,null,null).then(data=>{
+
+        this.locationService.service(this.locationid+'',null,null).then(result=>this.departments=<DepartmentModel[]>result);
+      }
+
+        
+
+      );
+   
   }
    // this.departments = departments;
     //this.department = null;
     this.displayDialog = false;
-    this.ngOnInit();
+  
 }
 
 }

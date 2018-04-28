@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http'; 
 
+
 import { LocationService } from './locationService';
 import { AppComponent } from './app.component';
 import {DataTableModule, TreeModule,DialogModule,ButtonModule,InputTextModule,ConfirmDialogModule} from 'primeng/primeng';
@@ -14,6 +15,7 @@ import { LocationComponent } from './location/location.component';
 import { DepartmentComponent } from './department/department.component';
 import { CategoryComponent } from './category/category.component';
 import { SubcategoryComponent } from './subcategory/subcategory.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -39,7 +41,8 @@ import { SubcategoryComponent } from './subcategory/subcategory.component';
     ButtonModule,
     InputTextModule,
     BrowserAnimationsModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+    HttpClientModule
 
   ],
   providers: [LocationService],
