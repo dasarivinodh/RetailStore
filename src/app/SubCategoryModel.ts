@@ -9,6 +9,5 @@ export class SubCategoryModel{
        this.name=name;
        this.description=description;
     }
-    // constructor()
-    // {}
+
 }

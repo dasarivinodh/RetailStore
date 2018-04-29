@@ -16,47 +16,14 @@ import { Observable } from 'rxjs/Observable';
 export class TreeHierarchicalComponent implements OnInit {
 
   results: TreeNode[];
-  locationTree: TreeNode[];
-  element: TreeNode;
   constructor(private locationService: LocationService) { }
 
-  nodeSelect(value) { }
-
-  nodeUnselect(value) { }
-
-  loadNode(value) {
-    if (value.node) {
-      switch (value.node.type) {
-        case 'ROOT':
-          this.locationService.service(null, null, null).then(result =>
-            value.node.children = this.treeFormationValue(result, this.getChildFlag(value.node.type), value.node));
-          break;
-
-        case 'CS':
-          this.locationService.service(value.node.id, null, null).then(result =>
-            value.node.children = this.treeFormationValue(result, this.getChildFlag(value.node.type), value.node));
-          break;
-        case 'DP':
-          const args: string[] = value.node.parentValue.split('/');
-          this.locationService.service(args[0], value.node.id, null).then(result =>
-            value.node.children = this.treeFormationValue(result, this.getChildFlag(value.node.type), value.node));
-          break;
-        case 'CT':
-          const arg: string[] = value.node.parentValue.split('/');
-          this.locationService.service(arg[0], arg[1], value.node.id).then(result =>
-            value.node.children = this.treeFormationValue(result, this.getChildFlag(value.node.type), value.node));
-          break;
-      }
-    }
-
-  }
-
   ngOnInit() {
-    this.locationService.service(null, null, null).then(result => this.node1Formation(result, 'CS'));
-    
+    this.locationService.service(null, null, null).then(result => this.rootNodeFormation());
+
   }
 
-  node1Formation(node1Result, flag) {
+  rootNodeFormation() {
     this.results = [
       {
         label: 'Root',
@@ -68,11 +35,37 @@ export class TreeHierarchicalComponent implements OnInit {
     ];
   }
 
-  treeFormationValue(node1Result, flag, node) {
+  loadChildNode(value) {
+    if (value.node) {
+      switch (value.node.type) {
+        case 'ROOT':
+          this.locationService.service(null, null, null).then(result =>
+            value.node.children = this.childTreeNodeFormation(result, this.getChildFlag(value.node.type), value.node));
+          break;
 
-    const locationTreeValue = node1Result;
+        case 'CS':
+          this.locationService.service(value.node.id, null, null).then(result =>
+            value.node.children = this.childTreeNodeFormation(result, this.getChildFlag(value.node.type), value.node));
+          break;
+        case 'DP':
+          const args: string[] = value.node.parentValue.split('/');
+          this.locationService.service(args[0], value.node.id, null).then(result =>
+            value.node.children = this.childTreeNodeFormation(result, this.getChildFlag(value.node.type), value.node));
+          break;
+        case 'CT':
+          const arg: string[] = value.node.parentValue.split('/');
+          this.locationService.service(arg[0], arg[1], value.node.id).then(result =>
+            value.node.children = this.childTreeNodeFormation(result, this.getChildFlag(value.node.type), value.node));
+          break;
+      }
+    }
+
+  }
+
+  childTreeNodeFormation(childData, flag, node) {
+
     if (flag === 'CS') {
-      for (let element of locationTreeValue) {
+      for (let element of childData) {
         element.label = element.name;
         element.collapsedIcon = 'fa-folder';
         element.expandedIcon = 'fa-folder-open';
@@ -82,7 +75,7 @@ export class TreeHierarchicalComponent implements OnInit {
       }
     }
     if (flag === 'DP') {
-      for (let element of locationTreeValue) {
+      for (let element of childData) {
         element.label = element.name;
         element.collapsedIcon = 'fa-folder';
         element.expandedIcon = 'fa-folder-open';
@@ -92,8 +85,7 @@ export class TreeHierarchicalComponent implements OnInit {
       }
     }
     if (flag === 'CT') {
-      for (let element of locationTreeValue) {
-        console.log('CT' + element.name);
+      for (let element of childData) {
         element.label = element.name;
         element.collapsedIcon = 'fa-folder';
         element.expandedIcon = 'fa-folder-open';
@@ -103,8 +95,7 @@ export class TreeHierarchicalComponent implements OnInit {
       }
     }
     if (flag === 'SC') {
-      for (let element of locationTreeValue) {
-        console.log('CT' + element.name);
+      for (let element of childData) {
         element.label = element.name;
         element.collapsedIcon = 'fa-folder';
         element.expandedIcon = 'fa-folder-open';
@@ -113,15 +104,14 @@ export class TreeHierarchicalComponent implements OnInit {
         element.parentValue = node.parentValue + '/' + element.id;
       }
     }
-    console.log(locationTreeValue);
-    return <TreeNode[]>locationTreeValue;
+
+    return <TreeNode[]>childData;
 
   }
 
 
   getChildFlag(flag) {
     let childflag = null;
-    console.log(flag);
     switch (flag) {
       case 'ROOT':
         childflag = 'CS';

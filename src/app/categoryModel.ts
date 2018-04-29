@@ -9,6 +9,5 @@ export class CategoryModel{
        this.name=name;
        this.description=description;
     }
-    // constructor()
-    // {}
+
 }

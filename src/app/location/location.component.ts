@@ -14,14 +14,12 @@ import { ComponentVisibiltyModel } from '../componentVisibiltyModel';
   providers: [ConfirmationService]
 })
 export class LocationComponent implements OnInit {
-  msgs: Message[];
   locations: LocationModel[];
   selectionLocation: LocationModel;
   location: LocationModel;
   displayDialog: boolean;
   newLocation: boolean;
   department: DepartmentModel[];
-  displayDept: boolean;
   flagModel: ComponentVisibiltyModel;
 
   constructor(private locationService: LocationService, private confirmationService: ConfirmationService) {
@@ -30,16 +28,14 @@ export class LocationComponent implements OnInit {
 
 
   ngOnInit() {
-    this.displayDept = false;
-    this.locationService.service(null, null, null).then(result => this.locations = <LocationModel[]>result);
+    this.getAllLocations();
     this.flagModel = new ComponentVisibiltyModel(true, false, false, false);
   }
 
-  save() {
+  createUpdateLocation() {
 
     if (this.newLocation) {
       this.locationService.postService(this.location, null, null, null).then(data => {
-
         let locations = [...this.locations];
         locations.push(<LocationModel>data);
         this.locations = locations;
@@ -48,7 +44,7 @@ export class LocationComponent implements OnInit {
     }
     else {
       this.locationService.putService(this.location, null, null, null).then(data =>
-        this.locationService.service(null, null, null).then(result => this.locations = <LocationModel[]>result)
+       this.getAllLocations()
       );
 
     }
@@ -56,7 +52,7 @@ export class LocationComponent implements OnInit {
     this.displayDialog = false;
 
   }
-
+ 
   showDialogToDelete() {
     this.confirmationService.confirm({
       message: 'Do you want to delete this record?',
@@ -64,7 +60,7 @@ export class LocationComponent implements OnInit {
       icon: 'fa fa-trash',
       accept: () => {
         this.locationService.deleteService(this.location.id + '', null, null, null).then(data => {
-          this.locationService.service(null, null, null).then(result => this.locations = <LocationModel[]>result);
+        this.getAllLocations();
         }
         );
 
@@ -77,6 +73,10 @@ export class LocationComponent implements OnInit {
     });
   }
 
+  getAllLocations()
+  {
+    this.locationService.service(null, null, null).then(result => this.locations = <LocationModel[]>result);
+  }
 
   showDialogToAdd() {
     this.newLocation = true;
@@ -90,7 +90,6 @@ export class LocationComponent implements OnInit {
   onRowSelect(event) {
     this.newLocation = false;
     this.location = this.cloneLocation(event.data);
-    this.displayDept = true;
     this.displayDialog = false;
     this.locationService.service(this.location.id + '', null, null).then(result => this.department = <DepartmentModel[]>result);
     this.flagModel = new ComponentVisibiltyModel(true, true, false, false);

@@ -9,6 +9,5 @@ export class DepartmentModel{
        this.name=name;
        this.description=description;
     }
-    // constructor()
-    // {}
+
 }

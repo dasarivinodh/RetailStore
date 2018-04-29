@@ -9,6 +9,4 @@ export class LocationModel{
        this.name=name;
        this.description=description;
     }
-    // constructor()
-    // {}
 }

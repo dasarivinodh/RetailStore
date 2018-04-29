@@ -20,7 +20,7 @@
 
 </p-dataTable>
 </div>
-<p-dialog header="category Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true">
+<p-dialog header="Category Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true">
 <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="category">
     <div class="ui-grid-row">
         <div class="ui-grid-col-4"><label for="name">Name</label></div>
@@ -35,7 +35,7 @@
 <p-footer>
     <div class="ui-dialog-buttonpane ui-helper-clearfix">
       
-        <button type="button" pButton icon="fa-check" (click)="save()" label="Save"></button>
+        <button type="button" pButton icon="fa-check" (click)="createUpdateCategory()" label="Save"></button>
     </div>
 </p-footer>
 </p-dialog>
