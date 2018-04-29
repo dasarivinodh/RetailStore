@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed ,inject} from '@angular/core/testing';
 
 import { LocationComponent } from './location.component';
 
@@ -13,23 +13,29 @@ import { DepartmentComponent } from '../department/department.component';
 import { LocationService } from '../locationService';
 import { CategoryComponent } from '../category/category.component';
 import { SubcategoryComponent } from '../subcategory/subcategory.component';
-import { inject } from '@angular/core/src/render3';
+
+
+
+
 
 describe('LocationComponent', () => {
 
-  var myserv, httpBackend;
+  let locationService: LocationService;
   let component: LocationComponent;
   let fixture: ComponentFixture<LocationComponent>;
 
+
   beforeEach(async(() => {
+
+
     TestBed.configureTestingModule({
-      declarations: [ LocationComponent,DepartmentComponent,CategoryComponent,SubcategoryComponent ],
+      declarations: [LocationComponent, DepartmentComponent, CategoryComponent, SubcategoryComponent],
       imports: [BrowserModule,
         DataTableModule,
         FormsModule,
-        
+
         HttpModule,
-        
+
         TreeModule,
         DialogModule,
         ButtonModule,
@@ -38,9 +44,9 @@ describe('LocationComponent', () => {
         BrowserAnimationsModule,
         ConfirmDialogModule,
         HttpClientModule],
-        providers: [LocationService,ConfirmationService]
+      providers: [LocationService, ConfirmationService]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -49,10 +55,13 @@ describe('LocationComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeDefined();
-  });
+ 
+  it('getService To Be Defined', inject([LocationService], (locationService: LocationService) => {
+    
+    console.log("Arguments"+locationService.apiUrl.apply);
+   
+        expect(locationService.apiUrl).toEqual("http://localhost:8080/location/");
+  }));
 
-  
-  
+
 });

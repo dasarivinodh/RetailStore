@@ -5,9 +5,6 @@ import { TreeNode, TreeModule } from 'primeng/primeng';
 
 import { Observable } from 'rxjs/Observable';
 
-
-
-
 @Component({
   selector: 'app-tree-hierarchical',
   templateUrl: './tree-hierarchical.component.html',
