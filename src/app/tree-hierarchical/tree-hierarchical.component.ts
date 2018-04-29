@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LocationService } from '../locationService';
 import { TreeNode, TreeModule } from 'primeng/primeng';
-import {MenuItem} from 'primeng/api';
+
 
 import { Observable } from 'rxjs/Observable';
 
@@ -17,7 +17,6 @@ export class TreeHierarchicalComponent implements OnInit {
 
   results: TreeNode[];
   locationTree: TreeNode[];
-  items: MenuItem[];
   element: TreeNode;
   constructor(private locationService: LocationService) { }
 
@@ -47,22 +46,14 @@ export class TreeHierarchicalComponent implements OnInit {
           this.locationService.service(arg[0], arg[1], value.node.id).then(result =>
             value.node.children = this.treeFormationValue(result, this.getChildFlag(value.node.type), value.node));
           break;
-
-
       }
-
-      // console.log(value.node);
     }
 
   }
 
   ngOnInit() {
     this.locationService.service(null, null, null).then(result => this.node1Formation(result, 'CS'));
-    this.items = [
-      {label: 'Add', icon: 'fa-search', command: (event) => {alert('add');}},
-      {label: 'Edit', icon: 'fa-close', command: (event) =>{ alert('edit');}},
-      {label: 'Delete', icon: 'fa-close', command: (event) => {alert('delete');}}
-    ];
+    
   }
 
   node1Formation(node1Result, flag) {

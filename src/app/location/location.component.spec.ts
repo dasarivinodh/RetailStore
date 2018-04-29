@@ -4,17 +4,20 @@ import { LocationComponent } from './location.component';
 
 
 import { BrowserModule } from '@angular/platform-browser';
-import { DataTableModule, TreeModule, DialogModule, ButtonModule, InputTextModule, ConfirmDialogModule } from 'primeng/primeng';
+import { DataTableModule, TreeModule, DialogModule, ButtonModule, InputTextModule, ConfirmDialogModule, ConfirmationService } from 'primeng/primeng';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient, HttpHandler } from '@angular/common/http';
 import { DepartmentComponent } from '../department/department.component';
 import { LocationService } from '../locationService';
 import { CategoryComponent } from '../category/category.component';
 import { SubcategoryComponent } from '../subcategory/subcategory.component';
+import { inject } from '@angular/core/src/render3';
 
 describe('LocationComponent', () => {
+
+  var myserv, httpBackend;
   let component: LocationComponent;
   let fixture: ComponentFixture<LocationComponent>;
 
@@ -35,7 +38,7 @@ describe('LocationComponent', () => {
         BrowserAnimationsModule,
         ConfirmDialogModule,
         HttpClientModule],
-        providers: [LocationService]
+        providers: [LocationService,ConfirmationService]
     })
     .compileComponents();
   }));
@@ -47,6 +50,9 @@ describe('LocationComponent', () => {
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(component).toBeDefined();
   });
+
+  
+  
 });

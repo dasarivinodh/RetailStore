@@ -5,8 +5,8 @@ import { HttpModule } from '@angular/http';
 
 import { LocationService } from './locationService';
 import { AppComponent } from './app.component';
-import { DataTableModule, TreeModule, DialogModule, ButtonModule, InputTextModule, ConfirmDialogModule, MenuModule } from 'primeng/primeng';
-import {ContextMenuModule} from 'primeng/contextmenu';
+import { DataTableModule, TreeModule, DialogModule, ButtonModule, InputTextModule, ConfirmDialogModule } from 'primeng/primeng';
+
 import { FormsModule } from '@angular/forms';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,7 +17,7 @@ import { DepartmentComponent } from './department/department.component';
 import { CategoryComponent } from './category/category.component';
 import { SubcategoryComponent } from './subcategory/subcategory.component';
 import { HttpClientModule } from '@angular/common/http';
-import {MenuItem} from 'primeng/api';
+
 
 
 @NgModule({
@@ -44,9 +44,7 @@ import {MenuItem} from 'primeng/api';
     InputTextModule,
     BrowserAnimationsModule,
     ConfirmDialogModule,
-    HttpClientModule,
-    MenuModule,
-    ContextMenuModule
+    HttpClientModule
   ],
   providers: [LocationService],
   bootstrap: [AppComponent]

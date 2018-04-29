@@ -41,6 +41,6 @@ describe('SubcategoryComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
+ 
   
 });
