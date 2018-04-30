@@ -19,7 +19,5 @@ describe('TreeHierarchicalComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+
 });

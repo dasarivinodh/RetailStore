@@ -13,6 +13,7 @@ import { DepartmentComponent } from '../department/department.component';
 import { LocationService } from '../locationService';
 import { CategoryComponent } from '../category/category.component';
 import { SubcategoryComponent } from '../subcategory/subcategory.component';
+import { LocationModel } from '../locationModel';
 
 
 
@@ -56,11 +57,18 @@ describe('LocationComponent', () => {
   });
 
  
-  it('getService To Be Defined', inject([LocationService], (locationService: LocationService) => {
+  it('getService apiUrl ', inject([LocationService], (locationService: LocationService) => {
     
-    console.log("Arguments"+locationService.apiUrl.apply);
+    console.log("Arguments"+locationService.apiUrl.length);
    
-        expect(locationService.apiUrl).toEqual("http://localhost:8080/location/");
+        expect(locationService.apiUrl.length).toEqual(4);
+  }));
+ 
+  it('getService ', inject([LocationService], (locationService: LocationService) => {
+    
+    console.log("Arguments"+locationService.service);
+   
+        locationService.service(null,null,null).then(value=>expect(value).toBe('Should return Promise Value'));
   }));
 
 
