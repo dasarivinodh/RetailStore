@@ -5,17 +5,18 @@ import { Observable } from "rxjs/Observable";
 import { LocationModel } from "./locationModel";
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/map';
+import { AppConfig } from "./app.config";
 
 
 @Injectable()
 export class LocationService implements OnInit {
 
-  apiRoot: string = 'http://localhost:8080/location/';
+  apiRoot: string = '';
 
   loading: boolean;
 
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,private appConfig:AppConfig) {
 
     this.loading = false;
   }
@@ -106,6 +107,8 @@ export class LocationService implements OnInit {
  // Forming API URL 
   apiUrl(location: String, department: String, category: String, deleteFlag: boolean) {
 
+    //fetchingg Api Url From Config 
+    this.apiRoot=this.appConfig.getConfig('url');
     let apiUrl: string = '';
 
     if (location && department && category) {

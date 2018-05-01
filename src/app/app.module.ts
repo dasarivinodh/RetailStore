@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
 
@@ -17,6 +17,7 @@ import { DepartmentComponent } from './department/department.component';
 import { CategoryComponent } from './category/category.component';
 import { SubcategoryComponent } from './subcategory/subcategory.component';
 import { HttpClientModule } from '@angular/common/http';
+import { AppConfig } from './app.config';
 
 
 
@@ -46,7 +47,16 @@ import { HttpClientModule } from '@angular/common/http';
     ConfirmDialogModule,
     HttpClientModule
   ],
-  providers: [LocationService],
+  providers: [
+    LocationService,
+    AppConfig,
+    { 
+      provide: APP_INITIALIZER, 
+      useFactory: (config: AppConfig) => () => config.load(), 
+      deps: [AppConfig], 
+      multi: true 
+    }
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
