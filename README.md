@@ -31,10 +31,14 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
 ## Update 
- Since the Project is developed with older version u need run below commandsonce u clone the project. 
+ Since the Project is developed with older version you may face issues you need run below commands once you clone the project. 
  
- `npm install --save-dev @angular/cli@v6.0.0-rc.4`
+`rm -rf node_modules dist tmp` 
  
- `ng update @angular/cli --migrate-only --from=1.7.4`
- 
+`npm install --save-dev angular-cli@latest`
+
+`npm install`
+
+`ng init`
+  
  `ng serve - > will start the project`
