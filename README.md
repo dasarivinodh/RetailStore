@@ -32,6 +32,8 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Update 
  Since the Project is developed with older version u need run below commandsonce u clone the project. 
- npm install --save-dev @angular/cli@v6.0.0-rc.4
- ng update @angular/cli --migrate-only --from=1.7.4
- ng serve - > will start the project
+ `npm install --save-dev @angular/cli@v6.0.0-rc.4`
+ 
+ `ng update @angular/cli --migrate-only --from=1.7.4`
+ 
+ `ng serve - > will start the project`
